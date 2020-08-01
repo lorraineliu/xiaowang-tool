@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from __future__ import print_function
+import os
 import click
+from crontab import CronTab
 
 from alicloud.common_bandwidth import modification
 
@@ -21,10 +23,8 @@ def cli():
 def modify_bandwidth(access_key_id, access_key_secret, region_id, instance_id, bandwidth):
     res = eval(modification.modify_bandwidth(access_key_id, access_key_secret, region_id, instance_id, bandwidth))
     if isinstance(res, dict) and 'RequestId' in res:
-        click.secho("Done", fg='green')
-    else:
-        click.secho(res, fg='red')
-
+        click.secho("Done", fg='blue')
+    click.secho(str(res), fg='yellow')
 
 if __name__ == '__main__':
     cli()
