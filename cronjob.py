@@ -8,7 +8,9 @@ from crontab import CronTab
 
 
 def make_cmd(access_key_id, access_key_secret, region_id, instance_id, bandwidth):
-    return 'python common-bandwidth.py modify-bandwidth %s %s %s -i %s -b %s' % (access_key_id, access_key_secret, region_id, instance_id, bandwidth)
+    dir_path = os.path.abspath(os.path.dirname("common-bandwidth.py"))
+    path = os.path.join(dir_path, "common-bandwidth.py")
+    return 'pipenv run python %s modify-bandwidth %s %s %s -i %s -b %s' % (path, access_key_id, access_key_secret, region_id, instance_id, bandwidth)
 
 
 def make_comment_times(instance_id):

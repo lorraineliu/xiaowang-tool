@@ -22,11 +22,12 @@
 
 `(xiaowang-tool) liuchendeMacBook-Pro% crontab -l`
 
-30 1 * * * python common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 50 # 1::30::cbwp-uf63jncsq2uxlrv1n11ve
+30 1 * * * pipenv run python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 50 # 1::30::cbwp-uf63jncsq2uxlrv1n11ve
 
-30 8 * * * python common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 200 # 8::30::cbwp-uf63jncsq2uxlrv1n11ve
+30 8 * * * pipenv run python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 200 # 8::30::cbwp-uf63jncsq2uxlrv1n11ve
 
-30 18 * * * python common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 100 # 18::30::cbwp-uf63jncsq2uxlrv1n11ve
+30 18 * * * pipenv run python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 100 # 18::30::cbwp-uf63jncsq2uxlrv1n11ve
+
 
 > 每条定时任务是一条python脚本执行命令
 
