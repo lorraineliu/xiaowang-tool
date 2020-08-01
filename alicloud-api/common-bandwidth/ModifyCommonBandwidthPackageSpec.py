@@ -13,7 +13,7 @@ request = ModifyCommonBandwidthPackageSpecRequest()
 request.set_accept_format('json')
 
 request.set_BandwidthPackageId("cbwp-uf63jncsq2uxlrv1n11ve")
-request.set_Bandwidth("70")
+request.set_Bandwidth("50")
 
 response = client.do_action_with_exception(request)
 # python2: print(response)
