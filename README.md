@@ -15,7 +15,11 @@
 ### 安装运行环境
 - 安装git获取代码
 - 安装pipenv一键部署运行环境
-### 定时任务初始化
+
+### cronjob脚本介绍
+> 本定时任务延用unix的cronjob，通过python-cronjob控制cronjob的生命周期
+> 设置好的cronjob可以用以下cmd来查看全部信息
+
 `(xiaowang-tool) liuchendeMacBook-Pro% crontab -l`
 
 30 1 * * * python common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 50 # 1::30::cbwp-uf63jncsq2uxlrv1n11ve
@@ -24,19 +28,63 @@
 
 30 18 * * * python common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 100 # 18::30::cbwp-uf63jncsq2uxlrv1n11ve
 
+>定时任务管理脚本的使用说明如下：
+>目前提供三个命令，init初始化，set更新带宽阈值，以及remove全部的定时任务
+
 `(xiaowang-tool) liuchendeMacBook-Pro% python cronjob.py --help` 
 
-Usage: cronjob.py [OPTIONS] COMMAND [ARGS]...
+Usage: cronjob.py [OPTIONS] COMMAND [ARGS]...<br>
 
-Options:
-  --help  Show this message and exit.
+Options:<br>
+  --help  Show this message and exit.<br>
 
 Commands:
   init-common-bandwidth-cronjob   Init common-bandwidth cronjob for...
-  remove-common-bandwidth-cronjob
-                                  Remove common-bandwidth cronjob from...
+  
+  remove-common-bandwidth-cronjob Remove common-bandwidth cronjob from...
+  
   set-common-bandwidth-cronjob    Add common-bandwidth cronjob for...
 
+### 定时任务初始化
+>一次性创建3个时段的定时任务，默认值为需求所示
+
+`(xiaowang-tool) liuchendeMacBook-Pro% python cronjob.py init-common-bandwidth-cronjob --help`
+
+Usage: cronjob.py init-common-bandwidth-cronjob [OPTIONS] ACCESS_KEY_ID
+                                                ACCESS_KEY_SECRET REGION_ID<br>
+
+  Init common-bandwidth cronjob for scheduler<br>
+
+Options: <br>
+  -i, --instance-id TEXT  Common Bandwidth Instance ID <br>
+  --help                  Show this message and exit. <br>
+
+
 ### 共享带宽脚本更新定时任务里带宽阈值
+> 当要更新某个时段定时任务的带宽阈值，可以使用该命令
+
+`(xiaowang-tool) liuchendeMacBook-Pro% python cronjob.py set-common-bandwidth-cronjob --help`
+
+Usage: cronjob.py set-common-bandwidth-cronjob [OPTIONS] ACCESS_KEY_ID
+                                               ACCESS_KEY_SECRET REGION_ID<br>
+
+  Set common-bandwidth cronjob for scheduler<br>
+
+Options: <br>
+  -i, --instance-id TEXT  Common Bandwidth Instance ID <br>
+  -b, --bandwidth TEXT    Common Bandwidth Package Bandwidth Value <br>
+  --help                  Show this message and exit. <br>
+
 
 ### 删除定时任务
+> 清空全部的定时任务
+
+`(xiaowang-tool) liuchendeMacBook-Pro% python cronjob.py remove-common-bandwidth-cronjob --help`
+
+Usage: cronjob.py remove-common-bandwidth-cronjob [OPTIONS]
+
+  Remove common-bandwidth cronjob from scheduler
+
+Options: <br>
+  --help  Show this message and exit. <br>
+

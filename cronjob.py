@@ -68,7 +68,7 @@ def init_common_bandwidth_cronjob(access_key_id, access_key_secret, region_id, i
     click.secho('Init Done', fg='blue')
 
 
-@cli.command(help="Add common-bandwidth cronjob for scheduler")
+@cli.command(help="Set common-bandwidth cronjob for scheduler")
 @click.argument('access-key-id')
 @click.argument('access-key-secret')
 @click.argument('region-id')
