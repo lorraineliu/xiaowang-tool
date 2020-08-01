@@ -28,6 +28,21 @@
 
 30 18 * * * python common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 100 # 18::30::cbwp-uf63jncsq2uxlrv1n11ve
 
+> 每条定时任务是一条python脚本执行命令
+
+`(xiaowang-tool) liuchendeMacBook-Pro% python common-bandwidth.py modify-bandwidth --help`
+
+Usage: common-bandwidth.py modify-bandwidth [OPTIONS] ACCESS_KEY_ID
+                                            ACCESS_KEY_SECRET REGION_ID<br>
+
+  Modify common bandwidth package specific<br>
+
+Options:<br>
+  -i, --instance-id TEXT  Common Bandwidth Instance ID<br>
+  -b, --bandwidth TEXT    Common Bandwidth Package Bandwidth Value<br>
+  --help                  Show this message and exit.<br>
+
+
 >定时任务管理脚本的使用说明如下：
 >目前提供三个命令，init初始化，set更新带宽阈值，以及remove全部的定时任务
 
