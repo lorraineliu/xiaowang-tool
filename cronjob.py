@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import os
+import sys
 import click
 import time
 import datetime
@@ -90,6 +91,20 @@ def remove_common_bandwidth_cronjob():
     my_cron = CronTab(user=os.environ.get("LOGNAME"))
     my_cron.remove_all()
     my_cron.write()
+
+
+@cli.command(help="Enable common-bandwidth cronjob from scheduler")
+def enable_common_bandwidth_cronjob():
+    my_cron = CronTab(user=os.environ.get("LOGNAME"))
+    if len(my_cron) == 0:
+        click.secho("No job!", fg="yellow")
+        sys.exit(0)
+    for job in my_cron:
+        import pdb;pdb.set_trace()
+        if job.is_enabled():
+            job.enable()
+            my_cron.write()
+            click.secho("enable job!", fg="green")
 
 
 if __name__ == '__main__':
