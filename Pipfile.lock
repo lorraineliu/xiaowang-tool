@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f73a087c945067b23968975c8ad4f42ca941eaa6105cc73f845d23e881be20c1"
+            "sha256": "5d43bf2fac48c4cceb85f3235015b97c455ae7a433d6cbbd464934b6bfc80bef"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "2.7"
+            "python_version": "3.7.7"
         },
         "sources": [
             {
@@ -55,10 +55,10 @@
         },
         "natsort": {
             "hashes": [
-                "sha256:c5944ffd2343141fa5679b17991c398e15105f3b35bb11beefe66c67e08289d5",
-                "sha256:daae7b2e22ef21305bf6921e49f6ad25d0e29f924e96e3bb447449e11446c726"
+                "sha256:a633464dc3a22b305df0f27abcb3e83515898aa1fd0ed2f9726c3571a27258cf",
+                "sha256:d3fd728a3ceb7c78a59aa8539692a75e37cbfd9b261d4d702e8016639820f90a"
             ],
-            "version": "==6.2.1"
+            "version": "==7.0.1"
         },
         "pycryptodome": {
             "hashes": [
