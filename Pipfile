@@ -1,16 +1,15 @@
 [[source]]
 name = "pypi"
-url = "http://mirrors.aliyun.com/pypi/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
 
 [packages]
-aliyun-python-sdk-core = "*"
-python-crontab = "*"
-aliyun-python-sdk-vpc = "*"
-croniter = "*"
 click = "*"
+python-crontab = "*"
+aliyun-python-sdk-core = "*"
+aliyun-python-sdk-vpc = "*"
 
 [requires]
-python_version = "2.7"
+python_version = "3.5"
