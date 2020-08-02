@@ -2,7 +2,7 @@
 from __future__ import print_function
 import click
 
-from alicloud.common_bandwidth import modification
+from src.alicloud.common_bandwidth import modification
 
 
 @click.group()

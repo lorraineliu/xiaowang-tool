@@ -11,7 +11,7 @@ from crontab import CronTab
 def make_cmd(access_key_id, access_key_secret, region_id, instance_id, bandwidth):
     dir_path = os.path.abspath(os.path.dirname("common-bandwidth.py"))
     path = os.path.join(dir_path, "common-bandwidth.py")
-    return 'pipenv run python %s modify-bandwidth %s %s %s -i %s -b %s' % (path, access_key_id, access_key_secret, region_id, instance_id, bandwidth)
+    return 'python %s modify-bandwidth %s %s %s -i %s -b %s >> /var/log/cron.log' % (path, access_key_id, access_key_secret, region_id, instance_id, bandwidth)
 
 
 def make_comment_times(instance_id):
@@ -33,7 +33,7 @@ def make_comment_times(instance_id):
 
 
 def set_cronjob(cmd, comment):
-    my_cron = CronTab(user=os.environ.get("LOGNAME"))
+    my_cron = CronTab(user="root")
     for job in my_cron:
         if job.comment == comment:
             my_cron.remove(job)
@@ -55,8 +55,7 @@ def cli():
 @click.argument('access-key-id')
 @click.argument('access-key-secret')
 @click.argument('region-id')
-@click.option('--instance-id', '-i', prompt='Common Bandwidth Instance ID',
-              help='Common Bandwidth Instance ID')
+@click.argument('instance_id')
 def init_common_bandwidth_cronjob(access_key_id, access_key_secret, region_id, instance_id):
     bandwidths = [50, 200, 100]
     for bandwidth in bandwidths:

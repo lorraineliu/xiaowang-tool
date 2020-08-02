@@ -13,8 +13,10 @@
 
 ## 使用说明文档
 ### 安装运行环境
-- 安装git获取代码
-- 安装pipenv一键部署运行环境
+- 安装docker以获取镜像
+> 执行以下cmd启动一键式安装<br>
+`docker run -d -e access_key_id=LTAI4G85dGMX71a2U25QvyBQ -e access_key_secret=ZY3yQKZzXvyA5weIESr7ezaYAhS65q -e region_id=cn-shanghai -e instance_id=cbwp-uf63jncsq2uxlrv1n11ve gdapenny/xiaowang-tool:v.0.1.0`
+
 
 ### cronjob脚本介绍
 > 本定时任务延用unix的cronjob，通过python-cronjob控制cronjob的生命周期
@@ -22,11 +24,11 @@
 
 `(xiaowang-tool) liuchendeMacBook-Pro% crontab -l`
 
-30 1 * * * pipenv run python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 50 # 1::30::cbwp-uf63jncsq2uxlrv1n11ve
+30 1 * * * python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 50 # 1::30::cbwp-uf63jncsq2uxlrv1n11ve
 
-30 8 * * * pipenv run python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 200 # 8::30::cbwp-uf63jncsq2uxlrv1n11ve
+30 8 * * * python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 200 # 8::30::cbwp-uf63jncsq2uxlrv1n11ve
 
-30 18 * * * pipenv run python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 100 # 18::30::cbwp-uf63jncsq2uxlrv1n11ve
+30 18 * * *python /Users/liuchen/src/xiaowang-tool/common-bandwidth.py modify-bandwidth LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai -i cbwp-uf63jncsq2uxlrv1n11ve -b 100 # 18::30::cbwp-uf63jncsq2uxlrv1n11ve
 
 
 > 每条定时任务是一条python脚本执行命令
