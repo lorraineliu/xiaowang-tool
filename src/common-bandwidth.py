@@ -25,5 +25,46 @@ def modify_bandwidth(access_key_id, access_key_secret, region_id, instance_id, b
     click.secho(str(res), fg='yellow')
 
 
+@click.command(help='Transfer eips between common bandwidth package')
+@click.argument('access-key-id')
+@click.argument('access-key-secret')
+@click.argument('region-id')
+@click.option('--source-instance-id', '-s', prompt='Source Common Bandwidth Instance ID',
+              help='Source Common Bandwidth Instance ID')
+@click.option('--target-bandwidth', '-tb', prompt='Target Common Bandwidth Instance Bandwidth',
+              help='Target Common Bandwidth Instance Bandwidth')
+def transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, source_instance_id, target_bandwidth):
+    res = modification.create_bandwidth_package(access_key_id, access_key_secret, region_id, target_bandwidth)
+    if not res[0]:
+        # TODO：发送告警邮件 with res[1]
+        pass
+    else:
+        status, res = modification.get_common_bandwidth_package_eips(access_key_id, access_key_secret, region_id, source_instance_id)
+        if not status:
+            # TODO：发送告警邮件 with res
+            pass
+        else:
+            target_instance_id = res[0]
+            for eip in res:
+                eip_id = eip["AllocationId"]
+                res = modification.add_bandwidth_package_eip(access_key_id, access_key_secret, region_id, target_instance_id, eip_id)
+                if not (isinstance(res, dict) and 'RequestId' in res):
+                    # TODO：发送告警邮件 with res
+                    break
+                else:
+                    res = modification.remove_bandwidth_package_eip(access_key_id, access_key_secret, region_id, source_instance_id, eip_id)
+                    if not (isinstance(res, dict) and 'RequestId' in res):
+                        # TODO：发送告警邮件 with res
+                        break
+            status, res = modification.get_common_bandwidth_package_eips(access_key_id, access_key_secret, region_id, source_instance_id)
+            if status and len(res) == 0:
+                res = modification.delete_bandwidth_package(access_key_id, access_key_secret, region_id, source_instance_id)
+                if not (isinstance(res, dict) and 'RequestId' in res):
+                    # TODO：发送告警邮件 with res
+                    pass
+                else:
+                    click.secho("Done", fg='blue')
+
+
 if __name__ == '__main__':
     cli()
