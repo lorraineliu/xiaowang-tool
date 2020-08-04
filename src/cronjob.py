@@ -99,7 +99,6 @@ def enable_common_bandwidth_cronjob():
         click.secho("No job!", fg="yellow")
         sys.exit(0)
     for job in my_cron:
-        import pdb;pdb.set_trace()
         if job.is_enabled():
             job.enable()
             my_cron.write()
