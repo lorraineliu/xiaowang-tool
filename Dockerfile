@@ -37,7 +37,8 @@ ADD src /app
 
 # Setup cron job
 # Run the command on container startup
-CMD python cronjob.py init-common-bandwidth-cronjob ${access_key_id} \
-    ${access_key_secret} \
-    ${region_id} \
-    ${instance_id} && tail -f /var/log/cron.log
+#CMD python cronjob.py init-common-bandwidth-cronjob ${access_key_id} \
+#    ${access_key_secret} \
+#    ${region_id} \
+#    ${instance_id} && tail -f /var/log/cron.log
+CMD tail -f /var/log/cron.log

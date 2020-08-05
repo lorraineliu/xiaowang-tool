@@ -1,13 +1,12 @@
 #!/usr/bin/env python
+import json
 from aliyunsdkcore.client import AcsClient
-from aliyunsdkvpc.request.v20160428.ModifyCommonBandwidthPackageSpecRequest import (
-    ModifyCommonBandwidthPackageSpecRequest,
-    CreateCommonBandwidthPackageRequest,
-    AddCommonBandwidthPackageIpRequest,
-    RemoveCommonBandwidthPackageIpRequest,
-    DeleteCommonBandwidthPackageRequest,
-    DescribeCommonBandwidthPackagesRequest,
-)
+from aliyunsdkvpc.request.v20160428.ModifyCommonBandwidthPackageSpecRequest import ModifyCommonBandwidthPackageSpecRequest
+from aliyunsdkvpc.request.v20160428.CreateCommonBandwidthPackageRequest import CreateCommonBandwidthPackageRequest
+from aliyunsdkvpc.request.v20160428.AddCommonBandwidthPackageIpRequest import AddCommonBandwidthPackageIpRequest
+from aliyunsdkvpc.request.v20160428.RemoveCommonBandwidthPackageIpRequest import RemoveCommonBandwidthPackageIpRequest
+from aliyunsdkvpc.request.v20160428.DeleteCommonBandwidthPackageRequest import DeleteCommonBandwidthPackageRequest
+from aliyunsdkvpc.request.v20160428.DescribeCommonBandwidthPackagesRequest import DescribeCommonBandwidthPackagesRequest
 
 
 def modify_bandwidth(key_id, key_crt, region_id, instance_id, bandwidth="50"):
@@ -25,8 +24,9 @@ def create_bandwidth_package(key_id, key_crt, region_id, bandwidth):
     request = CreateCommonBandwidthPackageRequest()
     request.set_accept_format('json')
     request.set_Bandwidth(bandwidth)
+    request.set_Name("target-%sMbps" % str(bandwidth))
     response = client.do_action_with_exception(request)
-    return response.get('bandwidthPackageId', None), response
+    return eval(response).get('BandwidthPackageId', None), response
 
 
 def add_bandwidth_package_eip(key_id, key_crt, region_id, instance_id, eip_id):
@@ -64,6 +64,7 @@ def get_common_bandwidth_package_eips(key_id, key_crt, region_id, instance_id):
     request.set_accept_format('json')
     request.set_BandwidthPackageId(instance_id)
     response = client.do_action_with_exception(request)
+    response = json.loads(response)
     if "RequestId" not in response:
         return False, response
     return True, response["CommonBandwidthPackages"]["CommonBandwidthPackage"][0]["PublicIpAddresses"]["PublicIpAddresse"]
