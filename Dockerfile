@@ -6,12 +6,12 @@ ENV LANG C.UTF-8
 ARG access_key_id
 ARG access_key_secret
 ARG region_id
-ARG instance_id
+ARG bandwidth_setting_dict
 
 ENV access_key_id=${access_key_id}
 ENV access_key_secret=${access_key_secret}
 ENV region_id=${region_id}
-ENV instance_id=${instance_id}
+ENV bandwidth_setting_dict=${bandwidth_setting_dict}
 
 RUN apt update && apt upgrade -y && apt install python \
     curl \
@@ -37,8 +37,7 @@ ADD src /app
 
 # Setup cron job
 # Run the command on container startup
-#CMD python cronjob.py init-common-bandwidth-cronjob ${access_key_id} \
-#    ${access_key_secret} \
-#    ${region_id} \
-#    ${instance_id} && tail -f /var/log/cron.log
-CMD tail -f /var/log/cron.log
+CMD python cronjob.py init-transfer-common-bandwidth-cronjob ${access_key_id} \
+    ${access_key_secret} \
+    ${region_id} \
+    ${bandwidth_setting_dict} && tail -f /var/log/cron.log

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import json
+import datetime
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkvpc.request.v20160428.ModifyCommonBandwidthPackageSpecRequest import ModifyCommonBandwidthPackageSpecRequest
 from aliyunsdkvpc.request.v20160428.CreateCommonBandwidthPackageRequest import CreateCommonBandwidthPackageRequest
@@ -24,7 +25,7 @@ def create_bandwidth_package(key_id, key_crt, region_id, bandwidth):
     request = CreateCommonBandwidthPackageRequest()
     request.set_accept_format('json')
     request.set_Bandwidth(bandwidth)
-    request.set_Name("target-%sMbps" % str(bandwidth))
+    request.set_Name("target-%sMbps" % (str(bandwidth)))
     response = client.do_action_with_exception(request)
     return eval(response).get('BandwidthPackageId', None), response
 
@@ -71,3 +72,16 @@ def get_common_bandwidth_package_eips(key_id, key_crt, region_id, instance_id):
 
 # [{"AllocationId":"eip-uf60emujjhj7uab8zk4ay","IpAddress":"106.14.45.6"},
 # {"AllocationId":"eip-uf610adh8kjelhxf9z781","IpAddress":"106.14.18.89"}]
+
+
+def get_current_common_bandwidth_packages(key_id, key_crt, region_id):
+    client = AcsClient(key_id, key_crt, region_id)
+    request = DescribeCommonBandwidthPackagesRequest()
+    request.set_accept_format('json')
+    response = client.do_action_with_exception(request)
+    response = json.loads(response)
+    if "RequestId" not in response:
+        return False, response
+    return True, response["CommonBandwidthPackages"]["CommonBandwidthPackage"]
+
+# [{"Status":"Available","Description":"","ResourceGroupId":"rg-acfns72zfysjtdq","InstanceChargeType":"PostPaid","ISP":"BGP","HasReservationData":false,"DeletionProtection":false,"BusinessStatus":"Normal","Name":"target-10Mbps","InternetChargeType":"PayByBandwidth","Bandwidth":"10","ExpiredTime":"","CreationTime":"2020-08-05T15:10:06Z","BandwidthPackageId":"cbwp-uf65bg3d0kn2g42cqgyql","PublicIpAddresses":{"PublicIpAddresse":[{"AllocationId":"eip-uf60emujjhj7uab8zk4ay","IpAddress":"106.14.45.6"},{"AllocationId":"eip-uf60ud51x5vbtpimc62w8","IpAddress":"101.132.108.79"},{"AllocationId":"eip-uf610adh8kjelhxf9z781","IpAddress":"106.14.18.89"},{"AllocationId":"eip-uf63mfnf82x6qb676qt22","IpAddress":"101.132.151.157"}]},"Ratio":100,"RegionId":"cn-shanghai"}]
