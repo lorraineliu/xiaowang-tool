@@ -187,10 +187,10 @@ def batch_common_bandwidth_transfer(access_key_id, access_key_secret, region_id,
             os.system('echo `date` >> /var/log/cron.log')
             click.secho('No need to transfer', fg='yellow')
             sys.exit(0)
-        cmd = make_common_bandwidth_cmd(access_key_id, access_key_secret, region_id, instance_id, bandwidth)
-        os.system(cmd)
-        msg = 'Successfully to transfer from instance_id: %s to bandwidth: %s' % (instance_id, bandwidth)
-        os.system('echo `date` >> /var/log/cron.log')
+        status = modification.transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, instance_id, bandwidth)
+        if status:
+            os.system('echo `date` >> /var/log/cron.log')
+            msg = 'Successfully to transfer from instance_id: %s to bandwidth: %s' % (instance_id, bandwidth)
         click.secho(msg, fg='blue')
 
 

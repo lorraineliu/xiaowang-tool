@@ -139,6 +139,6 @@ Options:<br>
 
 > 创建定时任务，启动命令：
 
-`root@5f0dd6e0eb17:/app/src# python cronjob.py init-transfer-common-bandwidth-cronjob LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai '{"8::30": "20", "18::25": "10", "23::40": "35"}'`
+`root@5f0dd6e0eb17:/app/src# python cronjob.py init-transfer-common-bandwidth-cronjob LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai '{"8::30": "20", "18::25": "10", "23::40": "5"}'`
 
 Done
