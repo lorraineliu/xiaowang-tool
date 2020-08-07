@@ -87,37 +87,31 @@ def get_current_common_bandwidth_packages(key_id, key_crt, region_id):
 # [{"Status":"Available","Description":"","ResourceGroupId":"rg-acfns72zfysjtdq","InstanceChargeType":"PostPaid","ISP":"BGP","HasReservationData":false,"DeletionProtection":false,"BusinessStatus":"Normal","Name":"target-10Mbps","InternetChargeType":"PayByBandwidth","Bandwidth":"10","ExpiredTime":"","CreationTime":"2020-08-05T15:10:06Z","BandwidthPackageId":"cbwp-uf65bg3d0kn2g42cqgyql","PublicIpAddresses":{"PublicIpAddresse":[{"AllocationId":"eip-uf60emujjhj7uab8zk4ay","IpAddress":"106.14.45.6"},{"AllocationId":"eip-uf60ud51x5vbtpimc62w8","IpAddress":"101.132.108.79"},{"AllocationId":"eip-uf610adh8kjelhxf9z781","IpAddress":"106.14.18.89"},{"AllocationId":"eip-uf63mfnf82x6qb676qt22","IpAddress":"101.132.151.157"}]},"Ratio":100,"RegionId":"cn-shanghai"}]
 
 
-def transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, source_instance_id, target_bandwidth):
-    res = create_bandwidth_package(access_key_id, access_key_secret, region_id, target_bandwidth)
-    if not res[0]:
-        # TODO：发送告警邮件 with res[1]
-        return False
+def transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, source_instance_id, target_instance_id):
+    status, res = get_common_bandwidth_package_eips(access_key_id, access_key_secret, region_id, source_instance_id)
+    if not status:
+        # TODO：发送告警邮件 with res
+        return False, res
     else:
-        target_instance_id = res[0]
+        for eip in res:
+            eip_id = eip["AllocationId"]
+            res = remove_bandwidth_package_eip(access_key_id, access_key_secret, region_id, source_instance_id, eip_id)
+            res = json.loads(res)
+            if not (isinstance(res, dict) and 'RequestId' in res):
+                # TODO：发送告警邮件 with res
+                return False, res
+            else:
+                res = add_bandwidth_package_eip(access_key_id, access_key_secret, region_id, target_instance_id, eip_id)
+                res = json.loads(res)
+                if not (isinstance(res, dict) and 'RequestId' in res):
+                    # TODO：发送告警邮件 with res
+                    return False, res
         status, res = get_common_bandwidth_package_eips(access_key_id, access_key_secret, region_id, source_instance_id)
-        if not status:
-            # TODO：发送告警邮件 with res
-            return False
-        else:
-            for eip in res:
-                eip_id = eip["AllocationId"]
-                res = remove_bandwidth_package_eip(access_key_id, access_key_secret, region_id, source_instance_id, eip_id)
-                res = json.loads(res)
-                if not (isinstance(res, dict) and 'RequestId' in res):
-                    # TODO：发送告警邮件 with res
-                    return False
-                else:
-                    res = add_bandwidth_package_eip(access_key_id, access_key_secret, region_id, target_instance_id, eip_id)
-                    res = json.loads(res)
-                    if not (isinstance(res, dict) and 'RequestId' in res):
-                        # TODO：发送告警邮件 with res
-                        return False
-            status, res = get_common_bandwidth_package_eips(access_key_id, access_key_secret, region_id, source_instance_id)
-            if status and len(res) == 0:
-                res = delete_bandwidth_package(access_key_id, access_key_secret, region_id, source_instance_id)
-                res = json.loads(res)
-                if not (isinstance(res, dict) and 'RequestId' in res):
-                    # TODO：发送告警邮件 with res
-                    return False
-                else:
-                    return True
+        if status and len(res) == 0:
+            res = delete_bandwidth_package(access_key_id, access_key_secret, region_id, source_instance_id)
+            res = json.loads(res)
+            if not (isinstance(res, dict) and 'RequestId' in res):
+                # TODO：发送告警邮件 with res
+                return False, res
+            else:
+                return True, "OK"

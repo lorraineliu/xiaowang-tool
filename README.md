@@ -139,6 +139,14 @@ Options:<br>
 
 > 创建定时任务，启动命令：
 
-`root@5f0dd6e0eb17:/app/src# python cronjob.py init-transfer-common-bandwidth-cronjob LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai '{"8::30": "20", "18::25": "10", "23::40": "5"}'`
+`root@5f0dd6e0eb17:/app/src# python cronjob.py init-transfer-common-bandwidth-cronjob LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai '{"8::30":"20","18::25":"10","23::40":"5"}'`
 
 Done
+
+> 容器启动命令：
+
+`(xiaowang-tool) ➜  xiaowang-tool git:(exchange-common-banwidth) ✗ docker run -d -e access_key_id=LTAI4G85dGMX71a2U25QvyBQ -e access_key_secret=ZY3yQKZzXvyA5weIESr7ezaYAhS65q -e region_id=cn-shanghai -e bandwidth_setting_dict='{"8::30":"20","18::25":"10","1::20":"5"}' gdapenny/transfer-common-bandwidth:v.0.2.0`
+
+> 容器运行日志查看
+
+`(xiaowang-tool) ➜  xiaowang-tool git:(exchange-common-banwidth) ✗ docker logs -f nostalgic_roentgen`

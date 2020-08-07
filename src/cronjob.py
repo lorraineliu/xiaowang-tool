@@ -179,19 +179,27 @@ def batch_common_bandwidth_transfer(access_key_id, access_key_secret, region_id,
         os.system('echo `date` >> /var/log/cron.log')
         click.secho('Can not get instance id', fg='red')
         sys.exit(0)
+    bandwidth_setting_dict = json.loads(bandwidth_setting_dict)
+    bandwidth = choose_bandwidth(bandwidth_setting_dict)
     for instance in instance_list:
         instance_id = instance["BandwidthPackageId"]
-        bandwidth_setting_dict = json.loads(bandwidth_setting_dict)
-        bandwidth = choose_bandwidth(bandwidth_setting_dict)
         if not bandwidth:
-            os.system('echo `date` >> /var/log/cron.log')
-            click.secho('No need to transfer', fg='yellow')
+            os.system('echo `date` >> /var/log/cron.log && echo No need to transfer >> /var/log/cron.log')
             sys.exit(0)
-        status = modification.transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, instance_id, bandwidth)
+        res = modification.create_bandwidth_package(access_key_id, access_key_secret, region_id, bandwidth)
+        if not res[0]:
+            # TODO：发送告警邮件 with res[1]
+            os.system('echo `date` >> /var/log/cron.log && echo Fail to create target common bandwidth instance >> /var/log/cron.log')
+            sys.exit(0)
+        status, res = modification.transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, instance_id, res[0])
         if status:
-            os.system('echo `date` >> /var/log/cron.log')
+            os.system('echo `date` >> /var/log/cron.log && echo Successfully to transfer from instance_id >> /var/log/cron.log')
             msg = 'Successfully to transfer from instance_id: %s to bandwidth: %s' % (instance_id, bandwidth)
-        click.secho(msg, fg='blue')
+            click.secho(msg, fg='blue')
+        else:
+            os.system('echo `date` >> /var/log/cron.log && echo')
+            msg = res
+            click.secho(msg, fg='red')
 
 
 @cli.command(help="Init transfer common-bandwidth cronjob")
