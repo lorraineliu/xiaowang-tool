@@ -25,9 +25,9 @@ def make_common_bandwidth_cmd(access_key_id, access_key_secret, region_id, sourc
 
 
 def make_batch_common_bandwidth_cmd(access_key_id, access_key_secret, region_id, bandwidth_setting_dict, cmd='batch-common-bandwidth-transfer'):
-    dir_path = os.path.abspath(os.path.dirname("cronjob.py"))
-    path = os.path.join(dir_path, "cronjob.py")
-    return "python %s %s %s %s %s \'%s\' >> /var/log/cron.log" % (path, cmd, access_key_id, access_key_secret, region_id, bandwidth_setting_dict)
+    dir_path = os.path.abspath(os.path.dirname("common-bandwidth.py"))
+    path = os.path.join(dir_path, "common-bandwidth.py")
+    return "python %s %s %s %s %s \'%s\'" % (path, cmd, access_key_id, access_key_secret, region_id, bandwidth_setting_dict)
 
 
 def make_comment_times(instance_id):
@@ -94,20 +94,6 @@ def set_cronjob_by_5min(cmd, comment="transfer-common-bandwidth-packages"):
     my_cron.write()
 
 
-def choose_bandwidth(bandwidth_setting_dict):
-    # 定时时间换算成北京时间，容器默认时区是UTC-格林尼治时区
-    now = datetime.datetime.now()
-    for k, v in bandwidth_setting_dict.items():
-        hour = int(str(k.split('::')[0]))
-        minute = int(str(k.split('::')[1]))
-        if hour >= 8:
-            hour = hour - 8
-        else:
-            hour = 16 + hour
-        if now.hour == hour and now.minute == minute:
-            return v
-    return None
-
 
 @click.group()
 def cli():
@@ -166,40 +152,6 @@ def enable_common_bandwidth_cronjob():
             job.enable()
             my_cron.write()
             click.secho("enable job!", fg="green")
-
-
-@cli.command(help="Batch run transfer common-bandwidth")
-@click.argument('access-key-id')
-@click.argument('access-key-secret')
-@click.argument('region-id')
-@click.argument('bandwidth-setting-dict')  # '{"8::30": "20", "18::25": "10", "1:20": "5"}'
-def batch_common_bandwidth_transfer(access_key_id, access_key_secret, region_id, bandwidth_setting_dict):
-    status, instance_list = modification.get_current_common_bandwidth_packages(access_key_id, access_key_secret, region_id)
-    if not status:
-        os.system('echo `date` >> /var/log/cron.log')
-        click.secho('Can not get instance id', fg='red')
-        sys.exit(0)
-    bandwidth_setting_dict = json.loads(bandwidth_setting_dict)
-    bandwidth = choose_bandwidth(bandwidth_setting_dict)
-    for instance in instance_list:
-        instance_id = instance["BandwidthPackageId"]
-        if not bandwidth:
-            os.system('echo `date` >> /var/log/cron.log && echo No need to transfer >> /var/log/cron.log')
-            sys.exit(0)
-        res = modification.create_bandwidth_package(access_key_id, access_key_secret, region_id, bandwidth)
-        if not res[0]:
-            # TODO：发送告警邮件 with res[1]
-            os.system('echo `date` >> /var/log/cron.log && echo Fail to create target common bandwidth instance >> /var/log/cron.log')
-            sys.exit(0)
-        status, res = modification.transfer_common_bandwidth_eips(access_key_id, access_key_secret, region_id, instance_id, res[0])
-        if status:
-            os.system('echo `date` >> /var/log/cron.log && echo Successfully to transfer from instance_id >> /var/log/cron.log')
-            msg = 'Successfully to transfer from instance_id: %s to bandwidth: %s' % (instance_id, bandwidth)
-            click.secho(msg, fg='blue')
-        else:
-            os.system('echo `date` >> /var/log/cron.log && echo')
-            msg = res
-            click.secho(msg, fg='red')
 
 
 @cli.command(help="Init transfer common-bandwidth cronjob")

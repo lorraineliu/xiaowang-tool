@@ -40,4 +40,4 @@ ADD src /app
 CMD python cronjob.py init-transfer-common-bandwidth-cronjob ${access_key_id} \
     ${access_key_secret} \
     ${region_id} \
-    ${bandwidth_setting_dict} && tail -f /var/log/cron.log
+    ${bandwidth_setting_dict} && cron && tail -f /var/log/cron.log
