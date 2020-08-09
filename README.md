@@ -137,6 +137,21 @@ Options:<br>
   -tb, --target-bandwidth TEXT   Target Common Bandwidth Instance Bandwidth<br>
   --help                         Show this message and exit.<br>
 
+> 初始化替换命令，格式如何：
+`root@acce3dbd0606:/app# python cronjob.py init-transfer-common-bandwidth-cronjob --help`
+
+>Usage: cronjob.py init-transfer-common-bandwidth-cronjob [OPTIONS]
+                                                         ACCESS_KEY_ID
+                                                         ACCESS_KEY_SECRET
+                                                         REGION_ID BANDWIDTH_S
+                                                         ETTING_DICT
+
+  Init transfer common-bandwidth cronjob
+
+Options:
+  --help  Show this message and exit.
+
+
 > 创建定时任务，启动命令：
 
 `root@5f0dd6e0eb17:/app/src# python cronjob.py init-transfer-common-bandwidth-cronjob LTAI4G85dGMX71a2U25QvyBQ ZY3yQKZzXvyA5weIESr7ezaYAhS65q cn-shanghai '{"8::30":"20","18::25":"10","23::40":"5"}'`
